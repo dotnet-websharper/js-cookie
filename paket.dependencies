@@ -7,9 +7,9 @@ strategy: min
 storage: none
 redirects: force
 
-nuget WebSharper prerelease
-nuget WebSharper.FSharp prerelease
-nuget WebSharper.UI prerelease
+nuget WebSharper ~> 10.0
+nuget WebSharper.FSharp ~> 10.0
+nuget WebSharper.UI ~> 10.0
 
 group wsbuild
     git https://github.com/dotnet-websharper/build-script websharper80

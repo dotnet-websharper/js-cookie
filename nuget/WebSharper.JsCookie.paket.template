@@ -15,7 +15,6 @@ tags
     Web JavaScript F# C# cookie cookies
 files
     ../WebSharper.JsCookie/bin/Release/netstandard2.0/WebSharper.JsCookie.dll ==> lib/netstandard2.0
-    ../WebSharper.JsCookie/bin/Release/netstandard2.0/WebSharper.JsCookie.websharper ==> lib/netstandard2.0
     ../WebSharper.JsCookie/bin/Release/netstandard2.0/WebSharper.JsCookie.xml ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
