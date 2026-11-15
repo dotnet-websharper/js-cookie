@@ -1,0 +1,21 @@
+type file
+id WebSharper.JsCookie
+authors
+    IntelliFactory
+owners
+    IntelliFactory
+repositoryType git
+repositoryUrl https://github.com/dotnet-websharper/js-cookie/
+licenseUrl https://github.com/dotnet-websharper/js-cookie/blob/main/LICENSE.md
+iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
+projectUrl https://github.com/dotnet-websharper/js-cookie
+description
+    WebSharper bindings for js-cookie
+tags
+    Web JavaScript F# C# cookie cookies
+files
+    ../WebSharper.JsCookie/bin/Release/netstandard2.0/WebSharper.JsCookie.dll ==> lib/netstandard2.0
+    ../WebSharper.JsCookie/bin/Release/netstandard2.0/WebSharper.JsCookie.websharper ==> lib/netstandard2.0
+    ../WebSharper.JsCookie/bin/Release/netstandard2.0/WebSharper.JsCookie.xml ==> lib/netstandard2.0
+dependencies
+        WebSharper ~> LOCKEDVERSION:[3]
