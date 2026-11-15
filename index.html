@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSharper.JsCookie — sample</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23b45309'/%3E%3Ccircle cx='6.2' cy='6' r='1.4' fill='%23fde68a'/%3E%3Ccircle cx='9.8' cy='7.4' r='1.2' fill='%23fde68a'/%3E%3Ccircle cx='7.4' cy='10' r='1.2' fill='%23fde68a'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="css/index.css" />
+    <script>
+        // Apply a stored theme before first paint to avoid a flash.
+        (function () {
+            try {
+                var t = localStorage.getItem("ws-jscookie-theme");
+                if (t === "dark" || t === "light") {
+                    document.documentElement.setAttribute("data-theme", t);
+                }
+            } catch (e) { /* storage can be blocked */ }
+        })();
+    </script>
+    
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-titles">
+            <h1>WebSharper.JsCookie</h1>
+            <p>js-cookie 3.0 bindings for F# — with <a href="https://websharper.com">WebSharper</a></p>
+        </div>
+        <div class="app-actions">
+            <button class="btn btn-ghost" ws-onclick="toggleTheme">${themeLabel}</button>
+            <a class="app-source" href="https://github.com/dotnet-websharper/js-cookie">Source</a>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="col">
+            <section class="card">
+                <header class="card-header">
+                    <h2>Cookie jar</h2>
+                    <p>
+                        Every cookie the current origin exposes, read with
+                        <code>Cookies.Get()</code> and enumerated with
+                        <code>Object.keys</code>. There are <strong>${jarCount}</strong>
+                        cookie(s) visible right now.
+                    </p>
+                </header>
+                <table class="jar">
+                    <thead>
+                        <tr><th>Name</th><th>Value</th></tr>
+                    </thead>
+                    <tbody ws-hole="cookieRows"></tbody>
+                </table>
+                <button class="btn" ws-onclick="refresh">Refresh</button>
+            </section>
+
+            <section class="card">
+                <header class="card-header">
+                    <h2>Raw <code>document.cookie</code></h2>
+                    <p>The browser's own view of the jar, tag included.</p>
+                </header>
+                <pre class="output">${rawDocumentCookie}</pre>
+            </section>
+
+            <section class="card">
+                <header class="card-header">
+                    <h2>Last result</h2>
+                </header>
+                <pre class="output">${lastResult}</pre>
+            </section>
+        </section>
+
+        <aside class="col">
+            <section class="card">
+                <header class="card-header">
+                    <h2>Set a cookie</h2>
+                    <p>Builds a <code>CookieAttributes</code> object and calls <code>Cookies.Set</code>.</p>
+                </header>
+                <label class="field">
+                    <span class="label">Name</span>
+                    <input class="input" type="text" ws-var="cookieName" placeholder="my-cookie" />
+                </label>
+                <label class="field">
+                    <span class="label">Value</span>
+                    <input class="input" type="text" ws-var="cookieValue" placeholder="value" />
+                </label>
+                <div class="field-row">
+                    <label class="field">
+                        <span class="label">Path</span>
+                        <input class="input" type="text" ws-var="attrPath" placeholder="/" />
+                    </label>
+                    <label class="field">
+                        <span class="label">Domain</span>
+                        <input class="input" type="text" ws-var="attrDomain" placeholder="(current host)" />
+                    </label>
+                </div>
+                <div class="field-row">
+                    <label class="field">
+                        <span class="label">Expires (days)</span>
+                        <input class="input" type="text" ws-var="attrExpires" placeholder="7" />
+                    </label>
+                    <label class="field">
+                        <span class="label">SameSite</span>
+                        <select class="input" ws-var="attrSameSite">
+                            <option value="">(unset)</option>
+                            <option value="lax">lax</option>
+                            <option value="strict">strict</option>
+                            <option value="none">none</option>
+                        </select>
+                    </label>
+                </div>
+                <label class="check">
+                    <input type="checkbox" ws-var="attrSecure" />
+                    <span>Secure (only accepted over https)</span>
+                </label>
+                <button class="btn btn-primary" ws-onclick="save">Cookies.Set</button>
+            </section>
+
+            <section class="card">
+                <header class="card-header">
+                    <h2>Read &amp; remove</h2>
+                </header>
+                <label class="field">
+                    <span class="label">Name</span>
+                    <input class="input" type="text" ws-var="readName" placeholder="my-cookie" />
+                </label>
+                <div class="toolbar">
+                    <button class="btn" ws-onclick="read">Cookies.Get(name)</button>
+                    <button class="btn" ws-onclick="readAll">Cookies.Get()</button>
+                    <button class="btn" ws-onclick="remove">Cookies.Remove</button>
+                </div>
+            </section>
+
+            <section class="card">
+                <header class="card-header">
+                    <h2>Derived instances</h2>
+                    <p>Both helpers return a new <code>CookiesApi</code> with the same surface. The probe shows that <code>noConflict</code> only exists in the UMD build.</p>
+                </header>
+                <div class="toolbar">
+                    <button class="btn" ws-onclick="scopedSet">WithAttributes</button>
+                    <button class="btn" ws-onclick="converted">WithConverter</button>
+                    <button class="btn" ws-onclick="noConflict">noConflict (UMD only)</button>
+                </div>
+            </section>
+
+            <section class="card">
+                <header class="card-header">
+                    <h2>Defaults</h2>
+                    <p>Read from the live <code>Cookies.Attributes</code> and <code>Cookies.Converter</code>.</p>
+                </header>
+                <dl class="readout">
+                    <div><dt>Attributes</dt><dd>${attributesText}</dd></div>
+                    <div><dt>Converter</dt><dd>${converterText}</dd></div>
+                </dl>
+                <p class="status">${status}</p>
+            </section>
+        </aside>
+    </main>
+
+    <script type="text/javascript" src="Scripts/WebSharper.JsCookie.Sample.min.js"></script>
+</body>
+</html>
