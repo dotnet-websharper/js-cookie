@@ -104,6 +104,14 @@ module Definition =
     // Members
     // ------------------------------------------------------------------
 
+    // Upstream allows arbitrary RFC 6265 attributes through a string indexer,
+    // alongside the named fields above.
+    CookieAttributes
+    |+> Instance [
+        Property "" T<obj> |> Indexed T<string>
+    ]
+    |> ignore
+
     // The whole cookie jar is a plain object keyed by cookie name.
     CookieMap
     |+> Instance [
